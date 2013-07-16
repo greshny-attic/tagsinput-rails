@@ -211,9 +211,10 @@
 
 			delimiter[id] = data.delimiter;
 
-			if (settings.onAddTag || settings.onRemoveTag || settings.onChange) {
+			if (settings.onAddTag || settings.onRemoveTag || settings.onChange || settings.onBeforeAddTag) {
 				tags_callbacks[id] = new Array();
 				tags_callbacks[id]['onAddTag'] = settings.onAddTag;
+				tags_callbacks[id]['onBeforeAddTag'] = settings.onBeforeAddTag;
 				tags_callbacks[id]['onRemoveTag'] = settings.onRemoveTag;
 				tags_callbacks[id]['onChange'] = settings.onChange;
 			}
@@ -279,8 +280,14 @@
 						$(data.fake_input).bind('blur',data,function(event) {
 							var d = $(this).attr('data-default');
 							if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) {
-								if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
-									$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+								if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ) {
+					                          if (tags_callbacks[id] && tags_callbacks[id]['onBeforeAddTag']) {
+					                              var f = tags_callbacks[id]['onBeforeAddTag'],
+                                                                      result = f.call(null, $(event.data.fake_input).val(), this);
+					                          }
+                                                                  if (result)
+                                                                    $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+                                                                }
 							} else {
 								$(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
 								$(event.data.fake_input).css('color',settings.placeholderColor);
@@ -293,8 +300,14 @@
 				$(data.fake_input).bind('keypress',data,function(event) {
 					if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
 					    event.preventDefault();
-						if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
-							$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+						if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ) {
+					          if (tags_callbacks[id] && tags_callbacks[id]['onBeforeAddTag']) {
+					            var f = tags_callbacks[id]['onBeforeAddTag'],
+					            result = f.call(null,$(event.data.fake_input).val(),this);
+					          }
+                                                  if (result)
+                                                    $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+                                                }
 					  	$(event.data.fake_input).resetAutosize(settings);
 						return false;
 					} else if (event.data.autosize) {
