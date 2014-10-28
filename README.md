@@ -4,6 +4,8 @@ tagsinput-rails wraps the [jQuery-Tags-Input](http://xoxco.com/projects/code/tag
 use with the asset pipeline provided by rails 3.1. The gem includes the development (non-minified)
 source for ease of exploration. The asset pipeline will minify in production.
 
+[![Gem Version](https://badge.fury.io/rb/tagsinput-rails.svg)](http://badge.fury.io/rb/tagsinput-rails)
+
 ## Installation
 
 Add this line to your application's Gemfile:
