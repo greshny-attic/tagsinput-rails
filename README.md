@@ -5,6 +5,8 @@ use with the asset pipeline provided by rails 3.1. The gem includes the developm
 source for ease of exploration. The asset pipeline will minify in production.
 
 [![Gem Version](https://badge.fury.io/rb/tagsinput-rails.svg)](http://badge.fury.io/rb/tagsinput-rails)
+[![Dependency Status](https://gemnasium.com/greshny/tagsinput-rails.svg)](https://gemnasium.com/greshny/tagsinput-rails)
+
 
 ## Installation
 
